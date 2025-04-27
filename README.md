@@ -954,3 +954,26 @@ With a solid understanding of how to connect tables using primary and foreign
 keys, we can take advantage of some helpful Flask-SQLAlchemy methods that make
 it much easier to build comprehensive database schemas and integrate them into
 our Flask applications.
+
+## Considerations
+
+### Foreign Key Integrity:
+
+Ensure that all foreign keys (employee_id) are set correctly when creating or modifying records. Missing or incorrect foreign keys will cause relationship failures.
+
+### Cascade Deletion Behavior:
+
+Set cascade options (all, delete-orphan) to automatically clean up related records when an employee is removed. Without cascades, the database could fill up with useless orphaned reviews and onboarding entries.
+
+### Bidirectional Relationships:
+
+Use back_populates to allow queries from either side (e.g., employee.reviews and review.employee), making the code more flexible and readable.
+
+### Choosing the Correct "Owner":
+
+Always store the foreign key on the "many" side (for one-to-many) and on the "belongs to" side (for one-to-one). This follows the Single Source of Truth (SSOT) principle.
+
+### Migration Management:
+
+Every time you update models to add relationships or columns, create a new migration and upgrade the database. Keep migrations small and descriptive for easy rollback if needed.
+
