@@ -179,13 +179,13 @@ $ python seed.py
 Confirm the database `server/instance/app.db` has the three tables with the
 initial seed data using a VS Code extension such as SQLite Viewer:
 
-![initial tables with seed data](https://curriculum-content.s3.amazonaws.com/7159/python-p4-v2-flask-sqlalchemy/init_db.png)
+![initial tables with seed data](/assets/init_db.png)
 
 #### Step 2: Determine Relational Data Model
 
 Let's update the initial data model to add two relationships.
 
-![employee one-to-many erd](https://curriculum-content.s3.amazonaws.com/7159/python-p4-v2-flask-sqlalchemy/employee_one_many.png)
+![employee one-to-many erd](/assets/employee_one_many.png)
 
 We will add a **one-to-many** relationship between `Employee` and `Review`. A
 **one-to-many** relationship is also referred to as a **has many/belongs to**
@@ -218,7 +218,7 @@ storing the relationship. Why? Beside each object on the "many" side is related
 to just one entity on the "one" side, thus it only needs to store a single value
 to maintain the relationship.
 
-![one to many owning side of relationship](https://curriculum-content.s3.amazonaws.com/7159/python-p4-v2-flask-sqlalchemy/one_many_owning.png)
+![one to many owning side of relationship](/assets/one_many_owning.png)
 
 While we store the relationship in just one place in the database, we often need
 to access and update both sides of the relationship within our application. We
@@ -244,7 +244,7 @@ The initial schema did not include a foreign key reference to an employee in the
 `reviews` table. Each row contains an annual performance review for one
 employee, but the data does not tell us which employee the review is for!
 
-![initial review table without foreign key](https://curriculum-content.s3.amazonaws.com/7159/python-p4-v2-flask-sqlalchemy/init_review.png)
+![initial review table without foreign key](/assets/init_review.png)
 
 Since `Review` is on the many or **belongs to** side, it is responsible for
 storing the relationship. Edit the `Review` model to add the attribute
@@ -299,7 +299,7 @@ After migration, the `reviews` table should be updated with a new foreign key
 column named `employee_id`. Confirm the new column exists (you may need to hit
 the refresh icon).
 
-![foreign key column added to reviews table](https://curriculum-content.s3.amazonaws.com/7159/python-p4-v2-flask-sqlalchemy/empty_review_fk.png)
+![foreign key column added to reviews table](/assets/empty_review_fk.png)
 
 The table has the new column `employee_id` with null values. You can use Flask
 shell to confirm the `employee_id` attribute exists but does not contain a
@@ -347,7 +347,7 @@ $ python seed.py
 Refresh the `reviews` table to confirm an employee id has been added to each
 row.
 
-![review with values in foreign key column](https://curriculum-content.s3.amazonaws.com/7159/python-p4-v2-flask-sqlalchemy/review_fk_values.png)
+![review with values in foreign key column](/assets/review_fk_values.png)
 
 You can also use the Flask shell to confirm the employee id.
 
@@ -362,7 +362,7 @@ $
 
 ##### Update #2: Add a relationship to the `Employee` model to reference a list of `Review` objects.
 
-![one to many owning side of relationship](https://curriculum-content.s3.amazonaws.com/7159/python-p4-v2-flask-sqlalchemy/one_many_owning.png)
+![one to many owning side of relationship](/assets/one_many_owning.png)
 
 `Employee` is on the "one" side of the relationship. Following the principle of
 SSOT, we should not store an employee's reviews in the `employees` table.
@@ -519,7 +519,7 @@ $ python seed.py
 The `reviews` table should look the same as before, with the `employee_id`
 foreign key column holding the integer id of the associated employee.
 
-![review with values in foreign key column](https://curriculum-content.s3.amazonaws.com/7159/python-p4-v2-flask-sqlalchemy/review_fk_values.png)
+![review with values in foreign key column](/assets/review_fk_values.png)
 
 ##### `back_populates` versus `backref`
 
@@ -576,7 +576,7 @@ to" side of the relationship (you can pick either model). The model on the
 Let's pick the `Onboarding` model to be on the **belongs to** side of the
 relationship.
 
-![one to one relationship owning side](https://curriculum-content.s3.amazonaws.com/7159/python-p4-v2-flask-sqlalchemy/one_one_belongsto.png)
+![one to one relationship owning side](/assets/one_one_belongsto.png)
 
 We'll need to make the following updates to the data model:
 
@@ -674,7 +674,7 @@ db.session.commit()
 
 Confirm the `onboardings` table stores the employee's id:
 
-![onboardings table with employee foreign key](https://curriculum-content.s3.amazonaws.com/7159/python-p4-v2-flask-sqlalchemy/onboarding_fk.png)
+![onboardings table with employee foreign key](/assets/onboarding_fk.png)
 
 Now we can explore the one-to-one relationship using Flask shell.
 
