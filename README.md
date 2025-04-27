@@ -42,6 +42,8 @@ In this lesson, you’ll apply relationship modeling patterns to:
 ## Tools & Resources
 
 - [GitHub Repo](https://github.com/learn-co-curriculum/flask-sqlalchemy-one-many-relationships-technical-lesson)
+- [SQLAlchemy ORM Documentation](https://docs.sqlalchemy.org/en/14/orm/)
+- [Basic Relationship Patterns - SQLAlchemy](https://docs.sqlalchemy.org/en/14/orm/basic_relationships.html)
 
 ## Setup
 
