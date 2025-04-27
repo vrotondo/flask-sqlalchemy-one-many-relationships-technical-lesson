@@ -18,6 +18,10 @@ models such that changes on one side of the relationship are propagated to the
 other side. This makes the syntax for accessing related models and creating join
 tables very simple.
 
+## Tools & Resources
+
+- [GitHub Repo](https://github.com/learn-co-curriculum/flask-sqlalchemy-one-many-relationships-technical-lesson)
+
 ## Setup
 
 This lesson is a code-along, so fork and clone the repo.
