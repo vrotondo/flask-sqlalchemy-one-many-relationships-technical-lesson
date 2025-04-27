@@ -1,11 +1,4 @@
-# One-to-One and One-To-Many Relationships : Code-Along
-
-## Learning Goals
-
-- Use Flask-SQLAlchemy to join models with one-to-one and one-to-many
-  relationships.
-
----
+# Technical Lesson: One-to-One and One-To-Many Relationships
 
 ## Introduction
 
@@ -24,8 +17,6 @@ Flask-SQLAlchemy uses a `ForeignKey` column to constrain and join data models, a
 models such that changes on one side of the relationship are propagated to the
 other side. This makes the syntax for accessing related models and creating join
 tables very simple.
-
----
 
 ## Setup
 
@@ -47,6 +38,13 @@ $ cd server
 $ export FLASK_APP=app.py
 $ export FLASK_RUN_PORT=5555
 ```
+
+## Instructions
+
+### Task 1: Define the Problem
+
+
+### Task 2: Determine the Design
 
 The file `server/models.py` defines 3 models named `Employee`, `Review`, and
 `Onboarding`. Relationships have not yet been established between the models.
@@ -106,6 +104,10 @@ class Review(db.Model):
   `Employee` model directly, it is seldom used and thus abstracted into a
   separate model.
 
+### Task 3: Develop, Test, and Refine the Code
+
+#### Step 1: Create Database Tables and Seed Data
+
 Run the following commands to create and seed the three tables with sample
 data.
 
@@ -119,9 +121,9 @@ $ python seed.py
 Confirm the database `server/instance/app.db` has the three tables with the
 initial seed data using a VS Code extension such as SQLite Viewer:
 
-## ![initial tables with seed data](https://curriculum-content.s3.amazonaws.com/7159/python-p4-v2-flask-sqlalchemy/init_db.png)
+![initial tables with seed data](https://curriculum-content.s3.amazonaws.com/7159/python-p4-v2-flask-sqlalchemy/init_db.png)
 
-## Relational Data Model
+#### Step 2: Determine Relational Data Model
 
 Let's update the initial data model to add two relationships.
 
@@ -143,7 +145,7 @@ relationship.
 - An employee **has one** onboarding.
 - An onboarding **belongs to** one employee.
 
-## One-To-Many Relationship
+#### Step 3: Implement One-To-Many Relationship
 
 We'll implement the one-to-many relationship first since it is more common than
 a one-to-one relationship.
@@ -176,7 +178,7 @@ Normally we will make the three changes to the data model all together in one
 step. However, this lesson performs them one at a time to clarify what each
 update does to the data model.
 
-### Update #1 : Add a foreign key column to the `Review` model to store the one-to-many relationship.
+##### Update #1 : Add a foreign key column to the `Review` model to store the one-to-many relationship.
 
 An employee **has many** reviews. A review **belongs to** one employee.
 
@@ -300,7 +302,7 @@ $ flask shell
 $
 ```
 
-### Update #2: Add a relationship to the `Employee` model to reference a list of `Review` objects.
+##### Update #2: Add a relationship to the `Employee` model to reference a list of `Review` objects.
 
 ![one to many owning side of relationship](https://curriculum-content.s3.amazonaws.com/7159/python-p4-v2-flask-sqlalchemy/one_many_owning.png)
 
@@ -352,7 +354,7 @@ the `employees` or `reviews` tables. The one-to-many relationship is still
 stored as a foreign key in the `reviews` table. Since the schema remains the
 same, we don't need to perform a migration.
 
-### Update #3: Add a reciprocal relationship to the `Review` model
+##### Update #3: Add a reciprocal relationship to the `Review` model
 
 We will to establish a bidirectional relationship (one-to-many and many-to-one)
 by adding a `relationship()` construct to the `Review` model. We will connect
@@ -461,7 +463,7 @@ foreign key column holding the integer id of the associated employee.
 
 ![review with values in foreign key column](https://curriculum-content.s3.amazonaws.com/7159/python-p4-v2-flask-sqlalchemy/review_fk_values.png)
 
-### `back_populates` versus `backref`
+##### `back_populates` versus `backref`
 
 Sometimes you will see examples of code where only one model is defined with
 `relationship()` and the method is passed a `backref` parameter rather than
@@ -504,7 +506,7 @@ class Review(db.Model):
 However, `backref` is considered legacy, and using `back_populates` with
 explicit `relationship()` constructs is generally recommended.
 
-## One-to-One Relationship
+#### Step 4: Implement One-to-One Relationship
 
 A one-to-one relationship is implemented in a similar manner as a one-to-many.
 
@@ -637,7 +639,7 @@ $ flask shell
 >>> exit()
 ```
 
-## Cascades
+##### Cascades
 
 In most one-to-many relationships like we see with employees and reviews, we
 want to make sure that when the parent (Employee) disappears, the child (Review)
@@ -727,33 +729,9 @@ We probably want a similar cascade between `Employee` and `Onboarding`. Since an
         'Onboarding', uselist=False, back_populates='employee', cascade='all, delete-orphan')
 ```
 
----
+#### Step 5: Verify your Code
 
-## Conclusion
-
-In this lesson, we focused on the most common kind of relationship between two
-models: the **one-to-many** or **has many/belongs to** relationship.
-
-We establish a bidirectional relationship between two models (one-to-many and
-many-to-one) by making the following updates:
-
-1. Add a foreign key column to the model on the "many" side to store the
-   one-to-many relationship.
-2. Add a relationship to the model on the "one" side to reference a list of
-   associated objects from the "many" side.
-3. Add a reciprocal relationship to the model on the "many" side and connect
-   both relationships using the `back_populates` property.
-
-We also saw how to implement a **one-to-one** or **has one/belongs to**
-relationship by using the `useList=False` parameter in the relationship on the
-"has one" side of the relationship.
-
-With a solid understanding of how to connect tables using primary and foreign
-keys, we can take advantage of some helpful Flask-SQLAlchemy methods that make
-it much easier to build comprehensive database schemas and integrate them into
-our Flask applications.
-
-### Solution Code
+Your final solution code should look like:
 
 ```py
 # server/models.py
@@ -870,3 +848,39 @@ with app.app_context():
     db.session.add_all([uri_onboarding, tristan_onboarding])
     db.session.commit()
 ```
+
+### Task 4: Document and Maintain
+
+Best Practice documentation steps:
+* Add comments to the code to explain purpose and logic, clarifying intent and functionality of your code to other developers.
+* Update README text to reflect the functionality of the application following https://makeareadme.com. 
+  * Add screenshot of completed work included in Markdown in README.
+* Delete any stale branches on GitHub
+* Remove unnecessary/commented out code
+* If needed, update git ignore to remove sensitive data
+
+---
+
+## Summary
+
+In this lesson, we focused on the most common kind of relationship between two
+models: the **one-to-many** or **has many/belongs to** relationship.
+
+We establish a bidirectional relationship between two models (one-to-many and
+many-to-one) by making the following updates:
+
+1. Add a foreign key column to the model on the "many" side to store the
+   one-to-many relationship.
+2. Add a relationship to the model on the "one" side to reference a list of
+   associated objects from the "many" side.
+3. Add a reciprocal relationship to the model on the "many" side and connect
+   both relationships using the `back_populates` property.
+
+We also saw how to implement a **one-to-one** or **has one/belongs to**
+relationship by using the `useList=False` parameter in the relationship on the
+"has one" side of the relationship.
+
+With a solid understanding of how to connect tables using primary and foreign
+keys, we can take advantage of some helpful Flask-SQLAlchemy methods that make
+it much easier to build comprehensive database schemas and integrate them into
+our Flask applications.
