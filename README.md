@@ -414,7 +414,7 @@ same, we don't need to perform a migration.
 
 ##### Update #3: Add a reciprocal relationship to the `Review` model
 
-We will to establish a bidirectional relationship (one-to-many and many-to-one)
+We will establish a bidirectional relationship (one-to-many and many-to-one)
 by adding a `relationship()` construct to the `Review` model. We will connect
 both relationships by assigning a mutual `back_populates` parameter:
 
