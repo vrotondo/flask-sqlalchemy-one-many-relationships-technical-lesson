@@ -18,6 +18,27 @@ models such that changes on one side of the relationship are propagated to the
 other side. This makes the syntax for accessing related models and creating join
 tables very simple.
 
+## Scenario
+
+You’ve recently joined NewHorizon Staffing, a fast-growing HR solutions company 
+that helps businesses manage employee records, performance reviews, and onboarding 
+tasks.
+
+The current backend system stores employee information in a single table, but now 
+stakeholders need linked records:
+
+* Each employee must have multiple performance reviews over time.
+* Each employee must also have one onboarding record after hiring.
+
+Instead of writing complicated SQL JOIN statements manually every time data needs to be accessed, your job is to establish relationships between models using Flask-SQLAlchemy, making the database easier to query, maintain, and scale.
+
+In this lesson, you’ll apply relationship modeling patterns to:
+
+* Connect employees to multiple reviews (One-to-Many).
+* Connect each employee to a single onboarding record (One-to-One).
+* Ensure relationships behave predictably when employees are added, modified, or deleted.
+
+
 ## Tools & Resources
 
 - [GitHub Repo](https://github.com/learn-co-curriculum/flask-sqlalchemy-one-many-relationships-technical-lesson)
@@ -47,12 +68,27 @@ $ export FLASK_RUN_PORT=5555
 
 ### Task 1: Define the Problem
 
+The company needs a relational database structure where:
+* Employees can be linked to many performance reviews over time.
+* Each employee is associated with one onboarding record after hiring.
+
+Without relationships between these models:
+* It’s hard to track which reviews belong to which employees.
+* There’s no reliable way to find onboarding information quickly.
+* Changes in employee records could leave "orphaned" reviews or onboarding entries.
+
+You must design model relationships that allow:
+* Access to related records in both directions (e.g., `employee.reviews` and `review.employee`).
+* Automatic updates and deletions when records change.
+* Simplified queries without raw SQL.
+
+This ensures the application remains scalable, maintainable, and user-friendly as the employee database grows.
 
 ### Task 2: Determine the Design
 
 The file `server/models.py` defines 3 models named `Employee`, `Review`, and
 `Onboarding`. Relationships have not yet been established between the models.
-You'll do that in this lesson.
+We’ll work on establishing the relationships in this lesson.
 
 ```py
 from flask_sqlalchemy import SQLAlchemy
@@ -107,6 +143,24 @@ class Review(db.Model):
   been filled out. While the onboarding information could be stored with the
   `Employee` model directly, it is seldom used and thus abstracted into a
   separate model.
+
+The technical design of the relationships includes:
+* One-to-Many Relationship:
+    * Employee has many Review records.
+    * Review belongs to one Employee.
+    * Implemented using a ForeignKey in Review and a relationship() with back_populates in both models.
+    * Use cascades to automatically delete related reviews if an employee is deleted.
+* One-to-One Relationship:
+    * Employee has one Onboarding record.
+    * Onboarding belongs to one Employee.
+    *   Implemented similarly to one-to-many, but with uselist=False in the relationship.
+    * Use cascades to delete onboarding records if an employee is deleted.
+* Seeding Strategy:
+    * Populate both Employee, Review, and Onboarding tables with realistic test data.
+    * Ensure foreign keys correctly link records together during the seed process.
+* Testing Strategy:
+    * Confirm through Flask shell that relationships work as expected.
+    * Validate that orphaned child records are properly removed when parent records are deleted.
 
 ### Task 3: Develop, Test, and Refine the Code
 
@@ -852,6 +906,18 @@ with app.app_context():
     db.session.add_all([uri_onboarding, tristan_onboarding])
     db.session.commit()
 ```
+
+#### Step 6: Commit and Push Git History
+
+* Commit and push your code:
+
+```bash
+git add .
+git commit -m "create pets table with some started data"
+git push
+```
+
+* If you created a separate feature branch, remember to open a PR on main and merge.
 
 ### Task 4: Document and Maintain
 
